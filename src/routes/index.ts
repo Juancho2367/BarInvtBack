@@ -1,9 +1,13 @@
 import { Router } from 'express';
+import authRoutes from './authRoutes';
 import productRoutes from './productRoutes';
 import saleRoutes from './saleRoutes';
 import clientRoutes from './clientRoutes';
 
 const router = Router();
+
+// Auth routes
+router.use('/auth', authRoutes);
 
 // API routes
 router.use('/products', productRoutes);

@@ -10,7 +10,8 @@
     "test": "jest",
     "lint": "eslint . --ext .ts",
     "format": "prettier --write \"src/**/*.ts\"",
-    "seed": "ts-node src/scripts/seedData.ts"
+    "seed": "ts-node src/scripts/seedData.ts",
+    "check-mongo": "ts-node src/scripts/checkMongo.ts"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
@@ -21,6 +22,7 @@
     "helmet": "^7.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.0.3",
+    "moongose": "^1.0.0",
     "morgan": "^1.10.0",
     "winston": "^3.11.0",
     "zod": "^3.22.4"
@@ -45,4 +47,4 @@
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   }
-} 
+}

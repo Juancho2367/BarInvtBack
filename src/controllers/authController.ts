@@ -20,7 +20,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     const { username, password } = validatedData;
 
     // Find user by username
-    const user = await User.findOne({ username, isActive: true }) as IUser | null;
+    const user = await User.findOne({ username, isActive: true });
     if (!user) {
       throw new AppError('Credenciales inválidas', 401);
     }
@@ -36,7 +36,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
     await user.save();
 
     // Generate token
-    const token = generateToken(user._id.toString(), user.role);
+    const token = generateToken((user._id as any).toString(), user.role);
 
     // Log successful login
     logger.info(`User ${username} logged in successfully`);
@@ -46,7 +46,7 @@ export const login = async (req: Request, res: Response, next: NextFunction) => 
       message: 'Login exitoso',
       token,
       user: {
-        id: user._id.toString(),
+        id: (user._id as any).toString(),
         username: user.username,
         email: user.email,
         role: user.role,
@@ -77,10 +77,10 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
     }
 
     // Create new user
-    const user = await User.create(validatedData) as IUser;
+    const user = await User.create(validatedData);
 
     // Generate token
-    const token = generateToken(user._id.toString(), user.role);
+    const token = generateToken((user._id as any).toString(), user.role);
 
     logger.info(`New user ${user.username} registered successfully`);
 
@@ -89,7 +89,7 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
       message: 'Usuario registrado exitosamente',
       token,
       user: {
-        id: user._id.toString(),
+        id: (user._id as any).toString(),
         username: user.username,
         email: user.email,
         role: user.role,

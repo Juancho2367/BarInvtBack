@@ -2,9 +2,9 @@
   "name": "inventario-bar-backend",
   "version": "1.0.0",
   "description": "Backend para el sistema de inventario de bar",
-  "main": "dist/index.js",
+  "main": "src/index.ts",
   "scripts": {
-    "start": "node dist/index.js",
+    "start": "ts-node src/index.ts",
     "dev": "nodemon src/index.ts",
     "build": "tsc",
     "vercel-build": "tsc",

@@ -1,8 +1,8 @@
 # Dependencies
 node_modules/
 
-# Build outputs
-dist/
+# Build outputs (not needed for Vercel TypeScript deployment)
+# dist/
 
 # Logs
 *.log

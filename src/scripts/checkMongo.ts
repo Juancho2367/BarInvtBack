@@ -3,7 +3,7 @@ import { logger } from '../utils/logger';
 
 async function checkMongoConnection() {
   try {
-    const mongoUri = process.env.MONGODB_URI || 'mongodb://localhost:27017/inventario-bar';
+    const mongoUri = process.env.MONGODB_URI || 'mongodb+srv://juandavidq2367:kypgvQSHcYu1ZnLu@clusterinvt.hio00gd.mongodb.net/?retryWrites=true&w=majority&appName=ClusterInvt';
     
     logger.info('🔍 Verificando conexión a MongoDB...');
     logger.info(`📍 URL: ${mongoUri}`);

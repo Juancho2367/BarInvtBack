@@ -7,7 +7,7 @@ export const userSchema = z.object({
   username: z.string().min(3, 'El usuario debe tener al menos 3 caracteres').max(50, 'El usuario no puede exceder 50 caracteres'),
   email: z.string().email('Email inválido'),
   password: z.string().min(6, 'La contraseña debe tener al menos 6 caracteres'),
-  role: z.enum(['admin', 'user', 'manager']).default('user'),
+  role: z.enum(['superadmin', 'admin', 'user', 'manager']).default('user'),
   isActive: z.boolean().default(true),
 });
 
@@ -40,7 +40,7 @@ const userMongooseSchema = new Schema({
   },
   role: {
     type: String,
-    enum: ['admin', 'user', 'manager'],
+    enum: ['superadmin', 'admin', 'user', 'manager'],
     default: 'user',
   },
   isActive: {
@@ -85,7 +85,7 @@ export interface IUser extends Document {
   username: string;
   email: string;
   password: string;
-  role: 'admin' | 'user' | 'manager';
+  role: 'superadmin' | 'admin' | 'user' | 'manager';
   isActive: boolean;
   lastLogin?: Date;
   createdAt: Date;

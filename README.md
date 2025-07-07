@@ -172,7 +172,8 @@ src/
 
 ### Credenciales de Prueba
 
-- **Admin**: `admin` / `admin123`
+- **Super Admin**: `superadmin` / `superadmin123` (Acceso completo + Reportes)
+- **Admin**: `admin` / `admin123` (Acceso limitado, sin reportes)
 - **Manager**: `manager` / `manager123`
 - **User**: `user` / `user123`
 

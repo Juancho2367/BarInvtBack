@@ -25,6 +25,23 @@ app.use(express.json());
 app.use(morgan('dev'));
 app.use(rateLimiter);
 
+// Root endpoint
+app.get('/', (req, res) => {
+  res.json({
+    status: 'OK',
+    message: 'Bar Inventory Backend API',
+    version: '1.0.0',
+    timestamp: new Date().toISOString(),
+    endpoints: {
+      health: '/api/health',
+      auth: '/api/auth',
+      products: '/api/products',
+      sales: '/api/sales',
+      reports: '/api/reports'
+    }
+  });
+});
+
 // Health check endpoint
 app.get('/api/health', (req, res) => {
   res.json({

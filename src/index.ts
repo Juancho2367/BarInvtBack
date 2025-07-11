@@ -3,7 +3,7 @@ import helmet from 'helmet';
 import morgan from 'morgan';
 import { config } from 'dotenv';
 import { connectDB } from './config/database';
-import { corsMiddleware, corsOptions } from './config/cors';
+import { corsMiddleware } from './config/cors';
 import { errorHandler } from './middleware/errorHandler';
 import { corsErrorHandler, corsLogger } from './middleware/corsErrorHandler';
 import { rateLimiter } from './middleware/rateLimiter';

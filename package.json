@@ -15,7 +15,8 @@
     "check-mongo": "ts-node src/scripts/checkMongo.ts",
     "test-cors": "ts-node src/scripts/testCors.ts",
     "find-url": "ts-node src/scripts/findBackendUrl.ts",
-    "test-preview": "ts-node src/scripts/testPreviewUrl.ts"
+    "test-preview": "ts-node src/scripts/testPreviewUrl.ts",
+    "test-regex": "ts-node src/scripts/testCorsRegex.ts"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

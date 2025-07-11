@@ -1,39 +1,44 @@
 import { Request, Response, NextFunction } from 'express';
 import { logger } from '../utils/logger';
 
-// Middleware para manejar errores de CORS de manera específica
+// Expresión regular para validar orígenes de Vercel
+const corsOriginRegex = /^https:\/\/bar-invt-front(-[a-zA-Z0-9]+(-juan-davids-projects-[a-zA-Z0-9]+)?)?\.vercel\.app$/;
+
+// CORS error handler
 export const corsErrorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
-  // Verificar si es un error de CORS
-  if (err.message === 'No permitido por CORS') {
+  if (err.message === 'Not allowed by CORS') {
     logger.warn(`CORS Error: ${req.method} ${req.path} from ${req.get('Origin') || 'unknown origin'}`);
     
     return res.status(403).json({
       error: 'CORS Error',
-      message: 'El origen de la solicitud no está permitido',
+      message: 'Origin not allowed',
+      origin: req.headers.origin,
+      timestamp: new Date().toISOString(),
       details: {
-        origin: req.get('Origin'),
-        method: req.method,
-        path: req.path,
-        timestamp: new Date().toISOString()
+        pattern: corsOriginRegex.toString(),
+        requestMethod: req.method,
+        requestPath: req.path,
+        userAgent: req.headers['user-agent']
       }
     });
   }
-
-  // Si no es un error de CORS, pasar al siguiente middleware
+  
   next(err);
 };
 
-// Middleware para logging de solicitudes CORS
+// CORS logging middleware
 export const corsLogger = (req: Request, res: Response, next: NextFunction) => {
-  const origin = req.get('Origin');
+  const origin = req.headers.origin;
   const method = req.method;
   const path = req.path;
-
-  // Log solo solicitudes CORS (con origen)
-  if (origin) {
-    logger.info(`CORS Request: ${method} ${path} from ${origin}`);
+  
+  logger.info(`[CORS] ${method} ${path} - Origin: ${origin || 'No origin'} - IP: ${req.ip}`);
+  
+  // Log CORS violations
+  if (origin && !corsOriginRegex.test(origin) && !origin.startsWith('http://localhost')) {
+    logger.warn(`[CORS WARNING] Unusual origin: ${origin} for ${method} ${path}`);
   }
-
+  
   next();
 };
 

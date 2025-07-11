@@ -1,9 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { logger } from '../utils/logger';
 
-// Expresión regular para validar orígenes de Vercel
-const corsOriginRegex = /^https:\/\/bar-invt-front(-[a-zA-Z0-9]+(-juan-davids-projects-[a-zA-Z0-9]+)?)?\.vercel\.app$/;
-
 // CORS error handler
 export const corsErrorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
   if (err.message === 'Not allowed by CORS') {
@@ -15,7 +12,7 @@ export const corsErrorHandler = (err: any, req: Request, res: Response, next: Ne
       origin: req.headers.origin,
       timestamp: new Date().toISOString(),
       details: {
-        pattern: corsOriginRegex.toString(),
+        allowedOrigins: ['https://bar-invt-front.vercel.app', 'https://bar-invt-front-2gcdivcpm-juan-davids-projects-3cf28ed7.vercel.app'],
         requestMethod: req.method,
         requestPath: req.path,
         userAgent: req.headers['user-agent']
@@ -35,7 +32,12 @@ export const corsLogger = (req: Request, res: Response, next: NextFunction) => {
   logger.info(`[CORS] ${method} ${path} - Origin: ${origin || 'No origin'} - IP: ${req.ip}`);
   
   // Log CORS violations
-  if (origin && !corsOriginRegex.test(origin) && !origin.startsWith('http://localhost')) {
+  const allowedOrigins = [
+    'https://bar-invt-front.vercel.app',
+    'https://bar-invt-front-2gcdivcpm-juan-davids-projects-3cf28ed7.vercel.app'
+  ];
+  
+  if (origin && !allowedOrigins.includes(origin) && !origin.startsWith('http://localhost') && !origin.includes('bar-invt-front')) {
     logger.warn(`[CORS WARNING] Unusual origin: ${origin} for ${method} ${path}`);
   }
   

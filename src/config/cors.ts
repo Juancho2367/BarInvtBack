@@ -1,33 +1,41 @@
 import cors from 'cors';
 import { logger } from '../utils/logger';
 
-// Expresión regular para validar orígenes de Vercel
-// Acepta:
-// 1. https://bar-invt-front.vercel.app (Producción)
-// 2. https://bar-invt-front-xxxxxxxx.vercel.app (Cualquier vista previa)
-// 3. https://bar-invt-front-xxxxxxxx-juan-davids-projects-xxxxxxxx.vercel.app (Vistas previa con hash largo)
-const corsOriginRegex = /^https:\/\/bar-invt-front(-[a-zA-Z0-9]+(-juan-davids-projects-[a-zA-Z0-9]+)?)?\.vercel\.app$/;
-
-// Configuración CORS optimizada con regex
+// Configuración CORS optimizada para Vercel
 const corsOptions = {
   origin: function (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) {
     // Permite solicitudes sin origen (ej. Postman, curl, mobile apps)
     if (!origin) {
+      console.log('[CORS] Allowing request without origin');
       return callback(null, true);
     }
     
     // En desarrollo, permite localhost
     if (process.env.NODE_ENV !== 'production' && origin.startsWith('http://localhost')) {
+      console.log(`[CORS] Allowing localhost in development: ${origin}`);
       return callback(null, true);
     }
     
-    // Valida el origen contra nuestra expresión regular
-    if (corsOriginRegex.test(origin)) {
-      return callback(null, true); // Origen permitido
+    // Lista de orígenes permitidos
+    const allowedOrigins = [
+      'https://bar-invt-front.vercel.app',
+      'https://bar-invt-front-2gcdivcpm-juan-davids-projects-3cf28ed7.vercel.app'
+    ];
+    
+    // Verificar si el origen está en la lista blanca
+    if (allowedOrigins.includes(origin)) {
+      console.log(`[CORS] Allowing origin: ${origin}`);
+      return callback(null, true);
+    }
+    
+    // Verificar si es una URL de Vercel con patrón similar
+    if (origin.includes('bar-invt-front') && origin.includes('vercel.app')) {
+      console.log(`[CORS] Allowing Vercel origin: ${origin}`);
+      return callback(null, true);
     }
     
     // Si no coincide, rechazar la solicitud
-    console.warn(`CORS blocked request from origin: ${origin}`);
+    console.warn(`[CORS] Blocked request from origin: ${origin}`);
     return callback(new Error('Not allowed by CORS'));
   },
   credentials: true, // Permite credenciales (cookies, authorization headers)
@@ -55,7 +63,7 @@ export const corsMiddleware = cors(corsOptions);
 // Función para obtener información de CORS (útil para debugging)
 export const getAllowedOrigins = (): { pattern: string, description: string } => {
   return {
-    pattern: corsOriginRegex.toString(),
-    description: 'Regex pattern for Vercel frontend URLs (production + preview)'
+    pattern: 'bar-invt-front.vercel.app + preview URLs',
+    description: 'Whitelist for Vercel frontend URLs (production + preview)'
   };
 }; 

@@ -18,7 +18,7 @@
       "headers": [
         {
           "key": "Access-Control-Allow-Origin",
-          "value": "https://tu-frontend.vercel.app"
+          "value": "https://bar-invt-front.vercel.app"
         },
         {
           "key": "Access-Control-Allow-Methods",

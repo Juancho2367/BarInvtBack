@@ -15,6 +15,8 @@ export const environment = {
       process.env.FRONTEND_URL,
       process.env.FRONTEND_VERCEL_URL,
     ].filter(Boolean) as string[],
+    // Patrón regex para URLs de Vercel (incluye vistas previas)
+    vercelPattern: /^https:\/\/bar-invt-front(-[a-zA-Z0-9]+)?\.vercel\.app$/,
   },
 
   // Configuración de seguridad
@@ -61,6 +63,7 @@ export const isOriginAllowed = (origin: string): boolean => {
 // Función para obtener la configuración de CORS basada en el entorno
 export const getCorsConfig = () => {
   const origins = getAllowedOrigins();
+  const { vercelPattern } = environment.cors;
   
   return {
     origin: function (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) {
@@ -69,12 +72,23 @@ export const getCorsConfig = () => {
         return callback(null, true);
       }
 
+      // Permitir localhost en desarrollo
+      if (process.env.NODE_ENV !== 'production' && origin.startsWith('http://localhost')) {
+        return callback(null, true);
+      }
+
       // Verificar si el origen está en la lista blanca
       if (origins.includes(origin)) {
-        callback(null, true);
-      } else {
-        callback(new Error('No permitido por CORS'));
+        return callback(null, true);
       }
+
+      // Verificar si coincide con el patrón de Vercel (incluye vistas previas)
+      if (vercelPattern.test(origin)) {
+        return callback(null, true);
+      }
+
+      // Si no coincide con ninguna regla, rechazar
+      callback(new Error('No permitido por CORS'));
     },
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: [

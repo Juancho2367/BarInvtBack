@@ -12,7 +12,8 @@
     "lint": "eslint . --ext .ts",
     "format": "prettier --write \"src/**/*.ts\"",
     "seed": "ts-node src/scripts/seedData.ts",
-    "check-mongo": "ts-node src/scripts/checkMongo.ts"
+    "check-mongo": "ts-node src/scripts/checkMongo.ts",
+    "test-cors": "ts-node src/scripts/testCors.ts"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

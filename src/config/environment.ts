@@ -17,6 +17,8 @@ export const environment = {
     ].filter(Boolean) as string[],
     // Patrón regex para URLs de Vercel (incluye vistas previas)
     vercelPattern: /^https:\/\/bar-invt-front(-[a-zA-Z0-9]+)?\.vercel\.app$/,
+    // Patrón regex para cualquier URL de Vercel (más flexible)
+    anyVercelPattern: /^https:\/\/.*\.vercel\.app$/,
   },
 
   // Configuración de seguridad
@@ -63,7 +65,7 @@ export const isOriginAllowed = (origin: string): boolean => {
 // Función para obtener la configuración de CORS basada en el entorno
 export const getCorsConfig = () => {
   const origins = getAllowedOrigins();
-  const { vercelPattern } = environment.cors;
+  const { vercelPattern, anyVercelPattern } = environment.cors;
   
   return {
     origin: function (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) {
@@ -82,8 +84,13 @@ export const getCorsConfig = () => {
         return callback(null, true);
       }
 
-      // Verificar si coincide con el patrón de Vercel (incluye vistas previas)
+      // Verificar si coincide con el patrón específico de Vercel (incluye vistas previas)
       if (vercelPattern.test(origin)) {
+        return callback(null, true);
+      }
+
+      // Verificar si es cualquier URL de Vercel (más flexible para desarrollo)
+      if (anyVercelPattern.test(origin)) {
         return callback(null, true);
       }
 

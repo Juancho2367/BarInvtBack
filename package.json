@@ -13,7 +13,8 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "seed": "ts-node src/scripts/seedData.ts",
     "check-mongo": "ts-node src/scripts/checkMongo.ts",
-    "test-cors": "ts-node src/scripts/testCors.ts"
+    "test-cors": "ts-node src/scripts/testCors.ts",
+    "find-url": "ts-node src/scripts/findBackendUrl.ts"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",

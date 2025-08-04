@@ -19,8 +19,11 @@ const corsOptions = {
     // Lista de orígenes permitidos
     const allowedOrigins = [
       'https://bar-invt-front.vercel.app',
-      'https://bar-invt-front-2gcdivcpm-juan-davids-projects-3cf28ed7.vercel.app'
-    ];
+      'https://bar-invt-front-2gcdivcpm-juan-davids-projects-3cf28ed7.vercel.app',
+      // Agregar cualquier URL adicional desde variables de entorno
+      process.env.FRONTEND_URL,
+      process.env.FRONTEND_VERCEL_URL
+    ].filter(Boolean); // Filtrar valores undefined
     
     // Verificar si el origen está en la lista blanca
     if (allowedOrigins.includes(origin)) {

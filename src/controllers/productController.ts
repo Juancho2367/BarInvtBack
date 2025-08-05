@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { z } from 'zod';
 import { Product, productSchema } from '../models/Product';
 import { AppError } from '../middleware/errorHandler';
 import { logger } from '../utils/logger';
@@ -29,11 +30,24 @@ export const getProductById = async (req: Request, res: Response, next: NextFunc
 // Create new product
 export const createProduct = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    logger.info('📝 Creando producto con datos:', JSON.stringify(req.body, null, 2));
+    
     const validatedData = productSchema.parse(req.body);
+    logger.info('✅ Datos validados correctamente:', JSON.stringify(validatedData, null, 2));
+    
     const product = await Product.create(validatedData);
+    logger.info('✅ Producto creado exitosamente:', product.name);
+    
     res.status(201).json(product);
   } catch (error) {
-    if (error instanceof Error) {
+    logger.error('❌ Error creando producto:', error);
+    
+    // Si es un error de validación de Zod, ser más específico
+    if (error instanceof z.ZodError) {
+      const errorMessages = error.errors.map(err => `${err.path.join('.')}: ${err.message}`).join(', ');
+      logger.error('❌ Errores de validación Zod:', errorMessages);
+      next(new AppError(`Errores de validación: ${errorMessages}`, 400));
+    } else if (error instanceof Error) {
       next(new AppError(error.message, 400));
     } else {
       next(error);
@@ -44,7 +58,11 @@ export const createProduct = async (req: Request, res: Response, next: NextFunct
 // Update product
 export const updateProduct = async (req: Request, res: Response, next: NextFunction) => {
   try {
+    logger.info('📝 Actualizando producto con datos:', JSON.stringify(req.body, null, 2));
+    
     const validatedData = productSchema.parse(req.body);
+    logger.info('✅ Datos validados correctamente:', JSON.stringify(validatedData, null, 2));
+    
     const product = await Product.findByIdAndUpdate(
       req.params.id,
       validatedData,
@@ -53,9 +71,18 @@ export const updateProduct = async (req: Request, res: Response, next: NextFunct
     if (!product) {
       throw new AppError('Producto no encontrado', 404);
     }
+    
+    logger.info('✅ Producto actualizado exitosamente:', product.name);
     res.json(product);
   } catch (error) {
-    if (error instanceof Error) {
+    logger.error('❌ Error actualizando producto:', error);
+    
+    // Si es un error de validación de Zod, ser más específico
+    if (error instanceof z.ZodError) {
+      const errorMessages = error.errors.map(err => `${err.path.join('.')}: ${err.message}`).join(', ');
+      logger.error('❌ Errores de validación Zod:', errorMessages);
+      next(new AppError(`Errores de validación: ${errorMessages}`, 400));
+    } else if (error instanceof Error) {
       next(new AppError(error.message, 400));
     } else {
       next(error);

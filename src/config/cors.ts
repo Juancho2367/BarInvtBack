@@ -8,7 +8,7 @@ const allowedOrigins = [
   
   // URLs de preview conocidas
   'https://bar-invt-front-2gcdivcpm-juan-davids-projects-3cf28ed7.vercel.app',
-  
+  'http://localhost:5173',
   // URLs adicionales desde variables de entorno
   process.env.FRONTEND_URL,
   process.env.FRONTEND_VERCEL_URL,

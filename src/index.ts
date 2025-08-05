@@ -16,6 +16,9 @@ config();
 // Create Express app
 const app = express();
 
+// Trust proxy for rate limiting in production (Vercel)
+app.set('trust proxy', 1);
+
 // Connect to MongoDB
 connectDB();
 

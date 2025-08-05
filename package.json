@@ -17,7 +17,9 @@
     "find-url": "ts-node src/scripts/findBackendUrl.ts",
     "test-preview": "ts-node src/scripts/testPreviewUrl.ts",
     "test-regex": "ts-node src/scripts/testCorsRegex.ts",
-    "manage-cors": "ts-node src/scripts/manageCorsUrls.ts"
+    "manage-cors": "ts-node src/scripts/manageCorsUrls.ts",
+    "migrate-ids": "ts-node src/scripts/migrateProductIds.ts",
+    "test-low-stock": "ts-node src/scripts/testLowStockAlerts.ts"
   },
   "dependencies": {
     "bcryptjs": "^2.4.3",
